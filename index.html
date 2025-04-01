@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria Słodkich Kotków</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 20px 0;
+            color: #444;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            aspect-ratio: 4 / 3;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        .heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            color: red;
+            opacity: 0.8;
+        }
+
+        .refresh-button {
+            margin: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #444;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .refresh-button:hover {
+            background-color: #666;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const gallery = document.querySelector('.gallery');
+            const refreshButton = document.querySelector('.refresh-button');
+            const imageCount = 5; // Number of images to display
+            const apiUrl = 'https://api.thecatapi.com/v1/images/search?limit=' + imageCount;
+
+            function loadImages() {
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        gallery.innerHTML = ''; // Clear existing images
+                        data.forEach(cat => {
+                            const img = document.createElement('img');
+                            img.src = cat.url;
+                            img.alt = "Słodki kotek";
+                            gallery.appendChild(img);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching cat images:', error));
+            }
+
+            refreshButton.addEventListener('click', loadImages);
+
+            loadImages(); // Initial load
+        });
+    </script>
+</head>
+<body>
+    <h1>Galeria Słodkich Kotków</h1>
+    <div class="heart">❤️</div>
+    <button class="refresh-button">Nowe Kotki</button>
+    <div class="gallery"></div>
+</body>
+</html>
